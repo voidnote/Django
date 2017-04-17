@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Results</title>
+  </head>
+  <body>
+    <div class="message">
+        <p>Thanks for submitting this form! You have submitted it {{request.session.submission}} times now.</p>
+    </div>
+    <div class="info">
+        <p>Submitted Information</p>
+        <p>Name: {{request.session.name}}</p>
+        <p>Dojo Location: {{request.session.location}}</p>
+        <p>Favorite Language: {{request.session.language}}</p>
+        <p>Comment: {{request.session.comment}}</p>
+        <form action="/" method="post">
+            {% csrf_token %}
+            <input type="submit" value="BACK">
+        </form>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Document</title>
+    </head>
+    <body>
+        <h1>Index HTML Yeah!</h1>
+        {{ request.session.value }}
+        <form action="/new_user" method="post">
+            {% csrf_token %}
+            <input type="text" name="first_name">
+            <input type="submit" value="submit">
+        </form>
+        <div>
+            <p>The time is:</p>
+            <p>{{date}}</p>
+            <p>{{time}}</p>
+        </div>
+        <div>
+            <p>Your random word is:</p>
+            <p>{{randomword}}</p>
+            <form action="/random" method="post">
+            {% csrf_token %}
+            <input type="submit" value="generate">
+            </form>
+            <p>You've seen {{site_visits}} random words</p>
+        </div>
+    </body>
+</html>

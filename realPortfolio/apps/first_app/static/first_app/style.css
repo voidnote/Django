@@ -1,0 +1,23 @@
+.header {
+    height: 50px;
+    width: 970px;
+    margin: 0px 0px 0px 0px;
+    text-align: center;
+    vertical-align: top;
+}
+
+.main {
+    height: 200px;
+    width: 970px;
+    margin: 50px 0px 0px 0px;
+    vertical-align: top;
+
+}
+
+.sectional {
+    height: 180px;
+    width: 300px;
+    margin: 0px 0px 0px 10px;
+    display: inline-block;
+    vertical-align: top;
+}
