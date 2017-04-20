@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <title></title>
+    </head>
+    <body>
+        <h1>Welcome, {{ user.first_name }}</h1>
+        {% if route == "register" %}
+        <h3>You've successfully registered!</h3>
+        {% else %}
+        <h3>Thanks for logging in. Welcome back.</h3>
+        {% endif %}
+    </body>
+</html>

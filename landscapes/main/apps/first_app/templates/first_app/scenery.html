@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    {% load staticfiles %}
+  </head>
+  <body>
+    {% if imgID < 1 or imgID > 40 %}
+        <h1> INVALID ENTRY GRRRRR...</h1>
+    {% elif imgID > 0 and imgID < 11 %}
+        <img src="{% static 'first_app/images/Black-Gate.jpg' %}">
+    {% elif imgID > 10 and imgID < 21 %}
+        <img src="{% static 'first_app/images/Aspen-Panorama.jpg' %}">
+    {% elif imgID > 20 and imgID < 31 %}
+        <img src="{% static 'first_app/images/Clearing-Fog.jpg' %}">
+    {% elif imgID > 30 and imgID < 41 %}
+        <img src="{% static 'first_app/images/Autumn-Sky-Lake-Tahoe.jpg' %}">
+    {% endif %}
+  </body>
+</html>
