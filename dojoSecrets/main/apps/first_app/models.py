@@ -1,32 +1,31 @@
 from __future__ import unicode_literals
 from django.db import models
-import os, binascii, md5, re
+import os, binascii, md5, re, bcrypt
 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 
 class UserManager(models.Manager):
     def validateUser(self, postData):
-        errors = []
+        errorStr = []
         if len(postData['first_name']) < 2:
-            errors.append("First name can't be less than 2 characters")
+            errorStr.append("First name can't be less than 2 characters")
         if len(postData['last_name']) < 2:
-            errors.append("Last name can't be less than 2 characters")
+            errorStr.append("Last name can't be less than 2 characters")
         if not EMAIL_REGEX.match(postData['email']):
-            errors.append("Invalid email")
+            errorStr.append("Invalid email")
         if len(postData["password"]) < 8:
-            errors.append("Password must be at least 8 characters")
+            errorStr.append("Password must be at least 8 characters")
         if postData["password"] != postData["pw_confirm"]:
-            errors.append("Password didn't match confirmation.")
+            errorStr.append("Password didn't match confirmation.")
 
         # create hashing
-        password = postData['password']
         salt = binascii.b2a_hex(os.urandom(15))
-        encrypted_pw = md5.new(password + salt).hexdigest()
+        encrypted_pw = bcrypt.hashpw(postData["password"].encode(), bcrypt.gensalt())
 
         response_to_views = {}
-        if errors:
+        if errorStr:
             response_to_views['status'] = False
-            response_to_views['errors'] = errors
+            response_to_views['errorStr'] = errorStr
         else:
             user = self.create(first_name = postData["first_name"], last_name = postData["last_name"], email = postData["email"], password = encrypted_pw, salt = salt)
             response_to_views['status'] = True
@@ -34,20 +33,18 @@ class UserManager(models.Manager):
         return response_to_views
 
     def loginUser(self, postData):
-        errors = []
+        errorStr = []
         
         user = User.object.filter(email=postData['email'])
         if not user:
-            errors.append("Invalid email")
+            errorStr.append("Invalid email")
         else: 
-            salt = user[0].salt
-            encrypted_pw = md5.new(postData['password'] + salt).hexdigest()
-            if user[0].password != encrypted_pw:
-                errors.append("Password is incorrect.")
+            if bcrypt.hashpw(postData['password'], user[0].password) == user[0].password:
+                errorStr.append("Password is incorrect.")
         response_to_views = {}
-        if errors:
+        if errorStr:
             response_to_views['status'] = False
-            response_to_views['errors'] = errors
+            response_to_views['errorStr'] = errorStr
         else: 
             response_to_views['status'] = True
             response_to_views['userobj'] = user[0]
@@ -68,5 +65,6 @@ class Secret(models.Model):
   created_at = models.DateField(auto_now_add=True)
   updated_at = models.DateField(auto_now=True)  
   user = models.ForeignKey(User, related_name="secrets")
+  likes = models.ManyToManyField(User, related_name = "likes")
  
 

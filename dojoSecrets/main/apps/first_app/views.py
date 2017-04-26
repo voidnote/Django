@@ -14,7 +14,7 @@ def process(request, route):
 		else:
 			response_from_models = User.object.loginUser(request.POST)
 		if not response_from_models["status"]:
-			for error in response_from_models["errors"]:
+			for error in response_from_models["errorStr"]:
 				messages.error(request, error)
 			return redirect("/")
 	return redirect("/secrets/"+str(response_from_models["userobj"].id)+"/"+route)
@@ -31,3 +31,14 @@ def post(request, id):
 	Secret.objects.create(secret = request.POST["secret"], user = User.object.get(id=id))
 	route = "post"
 	return redirect("/secrets/"+str(id)+"/"+route)
+
+def like(request, userid, secretid): 
+	this_user = User.object.get(id=userid)
+	this_secret = Secret.objects.get(id=secretid)
+	this_secret.likes.add(this_user)
+	route = "like"
+	return redirect("/secrets/"+str(userid)+"/"+route)
+
+def logout(request):
+	context = {}
+	return redirect("/")
