@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <title></title>
+        {% load staticfiles %}
+        <link rel='stylesheet' href='{% static 'first_app/css/styles.css' %}'>
+        <script src='{% static 'first_app/js/main.js' %}' > </script>
+    </head>
+    <body>
+        <h1>Add a New Book Title and a Review:</h1>
+       
+        {% for message in messages %}
+        <p>{{ message }}<p>
+        {% endfor %}
+
+<fieldset>
+<legend>Please register</legend>
+<form action="{% url 'reviews:create_review' %}" method='post'>
+    {% csrf_token %}
+    <label for='bookTitle'>Book Title:</label>
+    <input type='text' id='bookTitle' name='bookTitle'><br>
+    <label for='author'>Author:</label>
+    <input type='text' id='author' name='author'><br>
+    <label for='review'>Review:</label>
+    <textarea name='review'></textarea><br>
+    <select name='rating'>
+        <option value='1'>1</option>
+        <option value='2'>2</option>
+        <option value='3'>3</option>
+        <option value='4'>4</option>
+        <option value='5'>5</option>
+    </select>
+    <input type='submit' value='Add Book and Review'>
+</form>
+</fieldset>
+</body>
+</html>
+
